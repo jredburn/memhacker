@@ -12,10 +12,11 @@ class User < ActiveRecord::Base
                     :format     => { :with => email_regex },
                     :uniqueness => { :case_sensitive => false }
   
-  validates_presence_of :password, :on => :create
+  validates :password, :presence     => true,
+                       :length       => { :within => 6..40 }
   
-  def self.authenticate(email, password)
-    find_by_email(email).try(:authenticate, password)
+  def self.authenticate(email, submitted_password)
+    find_by_email(email).try(:authenticate, submitted_password)
   end
 end
 
